@@ -24,9 +24,9 @@ def change_adult(x):
     else:
         return  "non-adult_movies"
 #designing....
-load["Adult_category"]=load["adult"].apply(change_adult)
+load["Adult_category"]=load["Adult_category"].apply(change_adult)
 s.sidebar.header("Adult_category")
-adult_c=load["adult"].unique().tolist()
+adult_c=load["Adult_category"].unique().tolist()
 adult_c.insert(0,"ALL MOVIES🎥")
 saved_ad=s.sidebar.selectbox("Select for exploring the adult_category",adult_c)
 #DESIGNING A FILTER FOR REVENUE CATEGORY💵
@@ -78,12 +78,66 @@ if choice =="Home":
 elif choice =="Graphs":
     #heading
     s.title("Plotting data")
-    s.header("")
+    s.header("Movies vs Runtime⌚")#bar graph
+    #making a bar graph
+    movies=pd.read_csv("movies_df.csv")
+    runtime=movies["runtime"].head(5)
+    title=movies["title"].head(5)
+    fig1,x1=plt.subplots(figsize=(10,6))
+    x1.bar(title, runtime, color=["lightgray","dimgray","gainsboro","gray","silver"])
+    x1.set_xlabel("MOVIES", fontsize=14, color="black")
+    x1.set_ylabel("RUNTIME", fontsize=14, color="black")
+    x1.set_title("MOVIE vs RUNTIME", fontsize=16, color="black")
+    x1.grid()
+    s.pyplot(fig1)
+    s.text("This graph compares movies and their runtime.Each bar shows how long a movie is.Interstellar is the longest, and The Avengers is the shortest. ")
+    #making a line graph
+    movies=pd.read_csv("movies_df.csv")
+    s.divider()
+    s.header("Movies vs Popularity🟥")
+    popularity=movies["popularity"].tail(4)
+    title=movies["title"].tail(4)
+    fig2,x2=plt.subplots(figsize=(8,6))
+    x2.plot(title, popularity, color="saddlebrown", marker="o", linestyle="--")
+    x2.set_xlabel("MOVIES", fontsize=14, color="sienna")
+    x2.set_ylabel("POPULARITY", fontsize=14, color="sienna")
+    x2.set_title("MOVIE vs POPULARITY", fontsize=16, color="sienna")
+    plt.xticks(rotation=45, ha="right")
+    plt.tight_layout()
+    x2.grid()
+    s.pyplot(fig2)
+    s.text("This line graph shows the popularity of each movie.")
+    #making a pie chart
+    movies = pd.read_csv("movies_df.csv")
+    s.divider()
+    s.header("Movies by Decades⏳")
+    # convert release_date to datetime
+    movies["release_date"] = pd.to_datetime(movies["release_date"])
+    # create decades
+    movies["year"] = movies["release_date"].dt.year
+    movies_1990s = movies[(movies["year"] >= 1990) & (movies["year"] <= 1999)].shape[0]
+    movies_2000s = movies[(movies["year"] >= 2000) & (movies["year"] <= 2009)].shape[0]
+    movies_2010s = movies[(movies["year"] >= 2010) & (movies["year"] <= 2019)].shape[0]
+    # data for pie chart
+    labels = ["1990s", "2000s", "2010s"]
+    sizes = [movies_1990s, movies_2000s, movies_2010s]
+    # dark blue shades
+    colors = ["whitesmoke", "ivory", "floralwhite"]
+    # plot
+    fig, x = plt.subplots(figsize=(10, 6))
+    x.pie(sizes, labels=labels,colors=colors,autopct="%1.1f%%",startangle=90)
+    x.set_title("MOVIES BY DECADES", color="black", fontsize=16)
+    s.pyplot(fig)
+    s.text("This pie chart shows that out of 1813 movies , how many were released at which year.")
+
+        
+        
 
 
 
 
-    
+
+        
 
 
 
